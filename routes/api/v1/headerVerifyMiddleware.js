@@ -1,5 +1,6 @@
 const verifyApiHeaderToken = (req, res, next) =>{
     const {apitoken } = req.headers;
+    console.log(apitoken);
     if (apitoken){
         if(apitoken=== process.env.API_TOKEN){
             return next();

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Presentaciones = new require('../../../../dao/presentaciones/presentaciones.model');
-const presentacionModel = new Presentaciones();
+const Laboratorios = new require('../../../../dao/laboratorios/laboratorios.model');
+const laboratorioModel = new Laboratorios();
 
 
 //Paginacion
@@ -12,8 +12,8 @@ router.get('/facet/:page/:items', async (req,res)=>{
   const items = parseInt(req.params.items,10);
   if (allowedItemsNumber.includes(items)){
     try{
-      const presentaciones = await presentacionModel.getFaceted(page, items);
-      res.status(200).json({docs: presentaciones});
+      const laboratorios = await laboratorioModel.getFaceted(page, items);
+      res.status(200).json({docs: laboratorios});
     } catch(ex){
       console.log(ex);
       res.status(500).json({status: "faild"});
@@ -32,8 +32,8 @@ router.get('/byname/name:/:page/:items', async (req,res)=>{
   const items = parseInt(req.params.items,10);
   if (allowedItemsNumber.includes(items)){
     try{
-      const pacientes = await presentacionModel.getFaceted(page, items, {PresentacionNombre:name});
-      res.status(200).json({docs: pacientes});
+      const ilaboratorios = await laboratorioModel.getFaceted(page, items, {Laboratorio:name});
+      res.status(200).json({docs: inventarios});
     } catch(ex){
       console.log(ex);
       res.status(500).json({status: "faild"});
@@ -50,8 +50,8 @@ router.get('/byid/:id', async (req, res)=>{
   const {id} = req.params;
   if(id){
     try{
-        const row = await presentacionModel.getById(id);
-        res.status(200).json({status:'ok', paciente: row});
+        const row = await laboratorioModel.getById(id);
+        res.status(200).json({status:'ok', laboratorio: row});
     } catch (ex){
         console.log(ex);
         res.status(500).json({status:'failed'});
@@ -66,10 +66,10 @@ router.get('/byid/:id', async (req, res)=>{
 
 //POST NEW
 router.post('/new', async (req, res) => {
-  const { PresentacionNombre, PresentacionDescripcion } = req.body;
-  if(PresentacionNombre, PresentacionDescripcion){
+  const { LaboratorioNombre, LaboratorioDescripcion } = req.body;
+  if(LaboratorioNombre, LaboratorioDescripcion){
     try{
-      rslt = await presentacionModel.new(PresentacionNombre, PresentacionDescripcion);
+      rslt = await laboratorioModel.new(LaboratorioNombre, LaboratorioDescripcion);
       res.status(200).json(
         {
           status: 'ok',
@@ -83,27 +83,27 @@ router.post('/new', async (req, res) => {
           });
       }
   }else{
-    if(!PresentacionNombre){
+    if(!LaboratorioNombre){
       return res.status(400).json({
         status: 'failed',
-        result: "No se escribio el nombre de la Presentacion"
+        result: "No se escribio el nombre del Laboratorio"
     });
     }else{
       return res.status(400).json({
         status: 'failed',
-        result: "No se escribio la Descripcion de la Presentacion"
+        result: "No se ingreso la descripcion del Laboratorio"
     });
-    }
+  }
   }
 }); 
 
 //PUT UPDATE
 router.put('/update/:id', async (req, res)=>{
-  const { PresentacionNombre, PresentacionDescripcion } = req.body;
+  const { LaboratorioNombre, LaboratorioDescripcion } = req.body;
   const {id} = req.params;  
-  if(id,PresentacionNombre,PresentacionDescripcion){
+  if(id,LaboratorioNombre, LaboratorioDescripcion){
     try{
-      const result = await presentacionModel.updateOne(id, PresentacionNombre, PresentacionDescripcion);
+      const result = await laboratorioModel.updateOne(id, LaboratorioNombre, LaboratorioDescripcion);
       res.status(200).json({
         status:'ok', 
         result: result
@@ -114,16 +114,16 @@ router.put('/update/:id', async (req, res)=>{
       res.status(500).json({status: 'failed'})
     }
   } else{
-    if(!PresentacionNombre){
-      return res.status(400).json({
-        status: 'failed',
-        result: "No se escribio el nombre de la Presentacion"
-    });
-    }else{
-      return res.status(400).json({
-        status: 'failed',
-        result: "No se escribio la Descripcion de la Presentacion"
-    });
+    if(!LaboratorioNombre){
+        return res.status(400).json({
+          status: 'failed',
+          result: "No se escribio el nombre del Laboratorio"
+      });
+      }else{
+        return res.status(400).json({
+          status: 'failed',
+          result: "No se ingreso la descripcion del Laboratorio"
+      });
     }
   }
 });
@@ -133,7 +133,7 @@ router.delete('/delete/:id', async (req, res)=>{
   const {id} = req.params;
   if(id){
     try{
-      const result = await presentacionModel.deleteOne(id);
+      const result = await laboratorioModel.deleteOne(id);
       res.status(200).json({
         status:'ok', 
         result: result
@@ -146,7 +146,7 @@ router.delete('/delete/:id', async (req, res)=>{
   } else{
     return res.status(400).json({
       status: 'failed',
-      result: "No se Ingreso el id de la presentacion"
+      result: "No se Ingreso el id del Laboratorio"
   });
   }
   });

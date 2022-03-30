@@ -1,27 +1,41 @@
 const ObjectId  = require('mongodb').ObjectId;
 const getDb = require('../mongodb');
+const bcrypt = require('bcryptjs');
 let db = null;
-class Presentaciones {
+class Usuarios {
     collection = null;
   constructor() {
     getDb()
     .then( (database) => {
       db = database;
-      this.collection = db.collection('Presentaciones');
+      this.collection = db.collection('Usuarios');
       if (process.env.MIGRATE === 'true') {
           // Por si se ocupa algo
+          this.collection.createIndex({"usuarioContrasena":1},{unique: true}).then((rlst)=>{
+            console.log("Indice creado satisfactoriamente", rlst);
+        }).catch((err)=>{
+            console.error("Error al crear indice", err);
+        });
       }
     })
     .catch((err) => { console.error(err)});
   }
 
   //Insert
-  async new ( PresentacionNombre, PresentacionDescripcion) {
-    const newPresentacion = {
-        PresentacionNombre,
-        PresentacionDescripcion
+  async new ( usuarioNombre, usuarioTelefono, usuarioCorreo, usuarioContrasena, usuarioDireccion, usuarioFechaNacimiento, usuarioSexo, usuarioAdmin, usuarioRegistrado, usuarioUltimoLog) {
+    const newUsuario = {
+        usuarioNombre,
+        usuarioTelefono,
+        usuarioCorreo,
+        usuarioContrasena: await this.hashPassword(usuarioContrasena),
+        usuarioDireccion,
+        usuarioFechaNacimiento,
+        usuarioSexo,
+        usuarioAdmin,
+        usuarioRegistrado,
+        usuarioUltimoLog
     };
-    const rslt = await this.collection.insertOne(newPresentacion);
+    const rslt = await this.collection.insertOne(newUsuario);
     return rslt;
   }
 
@@ -50,14 +64,34 @@ class Presentaciones {
     return myDocument;
     
     }
+    async getByEmail(usuarioCorreo){
+      const filter = {usuarioCorreo};
+      const myDocument = await this.collection.findOne(filter);
+      return myDocument;
+      
+    }
+    async getByPhone(usuarioTelefono){
+      const filter = {usuarioTelefono};
+      const myDocument = await this.collection.findOne(filter);
+      return myDocument;
+      
+    }
 
     //Update
-    async updateOne(id, PresentacionNombre, PresentacionDescripcion){
+    async updateOne(id, usuarioNombre, usuarioTelefono, usuarioCorreo, usuarioContrasena, usuarioDireccion, usuarioFechaNacimiento, usuarioSexo, usuarioAdmin, usuarioRegistrado, usuarioUltimoLog){
       const filter = {_id: new ObjectId(id)};
       const updateCmd = {
         '$set':{
-          PresentacionNombre,
-          PresentacionDescripcion
+          usuarioNombre,
+          usuarioTelefono,
+          usuarioCorreo,
+          usuarioContrasena: await this.hashPassword(usuarioContrasena),
+          usuarioDireccion,
+          usuarioFechaNacimiento,
+          usuarioSexo,
+          usuarioAdmin,
+          usuarioRegistrado,
+          usuarioUltimoLog
         }
       };
       return await this.collection.updateOne(filter, updateCmd);
@@ -101,6 +135,14 @@ class Presentaciones {
       const filter = {_id: new ObjectId(id)};
       return await this.collection.deleteOne(filter);
     }
+    //Hash
+    async hashPassword(rawPassword){
+      return await bcrypt.hash(rawPassword, 10);
+      }
+  
+    async comparePassword(rawPassword, dbPassword){
+      return await bcrypt.compare(rawPassword,dbPassword);
+  }
 }
 
-module.exports = Presentaciones;
+module.exports = Usuarios;

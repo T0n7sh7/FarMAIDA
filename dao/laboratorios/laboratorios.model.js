@@ -1,13 +1,13 @@
 const ObjectId  = require('mongodb').ObjectId;
 const getDb = require('../mongodb');
 let db = null;
-class Presentaciones {
+class Laboratorios {
     collection = null;
   constructor() {
     getDb()
     .then( (database) => {
       db = database;
-      this.collection = db.collection('Presentaciones');
+      this.collection = db.collection('Laboratorios');
       if (process.env.MIGRATE === 'true') {
           // Por si se ocupa algo
       }
@@ -16,12 +16,12 @@ class Presentaciones {
   }
 
   //Insert
-  async new ( PresentacionNombre, PresentacionDescripcion) {
-    const newPresentacion = {
-        PresentacionNombre,
-        PresentacionDescripcion
+  async new ( LaboratorioNombre, LaboratorioDescripcion) {
+    const newLaboratorio = {
+        LaboratorioNombre,
+        LaboratorioDescripcion
     };
-    const rslt = await this.collection.insertOne(newPresentacion);
+    const rslt = await this.collection.insertOne(newLaboratorio);
     return rslt;
   }
 
@@ -52,12 +52,12 @@ class Presentaciones {
     }
 
     //Update
-    async updateOne(id, PresentacionNombre, PresentacionDescripcion){
+    async updateOne(id, LaboratorioNombre, LaboratorioDescripcion){
       const filter = {_id: new ObjectId(id)};
       const updateCmd = {
         '$set':{
-          PresentacionNombre,
-          PresentacionDescripcion
+          LaboratorioNombre,
+          LaboratorioDescripcion
         }
       };
       return await this.collection.updateOne(filter, updateCmd);
@@ -103,4 +103,4 @@ class Presentaciones {
     }
 }
 
-module.exports = Presentaciones;
+module.exports = Laboratorios;

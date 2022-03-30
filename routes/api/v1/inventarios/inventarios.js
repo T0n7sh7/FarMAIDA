@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Presentaciones = new require('../../../../dao/presentaciones/presentaciones.model');
-const presentacionModel = new Presentaciones();
+const Inventarios = new require('../../../../dao/inventarios/inventarios.model');
+const inventarioModel = new Inventarios();
 
 
 //Paginacion
@@ -12,8 +12,8 @@ router.get('/facet/:page/:items', async (req,res)=>{
   const items = parseInt(req.params.items,10);
   if (allowedItemsNumber.includes(items)){
     try{
-      const presentaciones = await presentacionModel.getFaceted(page, items);
-      res.status(200).json({docs: presentaciones});
+      const inventarios = await inventarioModel.getFaceted(page, items);
+      res.status(200).json({docs: inventarios});
     } catch(ex){
       console.log(ex);
       res.status(500).json({status: "faild"});
@@ -32,8 +32,8 @@ router.get('/byname/name:/:page/:items', async (req,res)=>{
   const items = parseInt(req.params.items,10);
   if (allowedItemsNumber.includes(items)){
     try{
-      const pacientes = await presentacionModel.getFaceted(page, items, {PresentacionNombre:name});
-      res.status(200).json({docs: pacientes});
+      const inventarios = await inventarioModel.getFaceted(page, items, {Producto:name});
+      res.status(200).json({docs: inventarios});
     } catch(ex){
       console.log(ex);
       res.status(500).json({status: "faild"});
@@ -50,8 +50,8 @@ router.get('/byid/:id', async (req, res)=>{
   const {id} = req.params;
   if(id){
     try{
-        const row = await presentacionModel.getById(id);
-        res.status(200).json({status:'ok', paciente: row});
+        const row = await inventarioModel.getById(id);
+        res.status(200).json({status:'ok', inventario: row});
     } catch (ex){
         console.log(ex);
         res.status(500).json({status:'failed'});
@@ -66,10 +66,10 @@ router.get('/byid/:id', async (req, res)=>{
 
 //POST NEW
 router.post('/new', async (req, res) => {
-  const { PresentacionNombre, PresentacionDescripcion } = req.body;
-  if(PresentacionNombre, PresentacionDescripcion){
+  const { InventarioExistencia, InventarioFechaCaducidad, Producto } = req.body;
+  if(InventarioExistencia, InventarioFechaCaducidad, Producto){
     try{
-      rslt = await presentacionModel.new(PresentacionNombre, PresentacionDescripcion);
+      rslt = await inventarioModel.new(InventarioExistencia, InventarioFechaCaducidad, Producto);
       res.status(200).json(
         {
           status: 'ok',
@@ -83,27 +83,32 @@ router.post('/new', async (req, res) => {
           });
       }
   }else{
-    if(!PresentacionNombre){
+    if(!InventarioExistencia){
       return res.status(400).json({
         status: 'failed',
-        result: "No se escribio el nombre de la Presentacion"
+        result: "No se escribio la cantidad de Existencias"
     });
-    }else{
+    }else if(InventarioFechaCaducidad){
       return res.status(400).json({
         status: 'failed',
-        result: "No se escribio la Descripcion de la Presentacion"
+        result: "No se ingreso la Fecha de Caducidad"
     });
-    }
+    } else{
+      return res.status(400).json({
+        status: 'failed',
+        result: "No se ingreso el producto del inventario"
+    });
+  }
   }
 }); 
 
 //PUT UPDATE
 router.put('/update/:id', async (req, res)=>{
-  const { PresentacionNombre, PresentacionDescripcion } = req.body;
+  const { InventarioExistencia, InventarioFechaCaducidad, Producto } = req.body;
   const {id} = req.params;  
-  if(id,PresentacionNombre,PresentacionDescripcion){
+  if(id,InventarioExistencia, InventarioFechaCaducidad, Producto){
     try{
-      const result = await presentacionModel.updateOne(id, PresentacionNombre, PresentacionDescripcion);
+      const result = await inventarioModel.updateOne(id, InventarioExistencia, InventarioFechaCaducidad, Producto);
       res.status(200).json({
         status:'ok', 
         result: result
@@ -114,17 +119,22 @@ router.put('/update/:id', async (req, res)=>{
       res.status(500).json({status: 'failed'})
     }
   } else{
-    if(!PresentacionNombre){
+    if(!InventarioExistencia){
       return res.status(400).json({
         status: 'failed',
-        result: "No se escribio el nombre de la Presentacion"
+        result: "No se escribio la cantidad de Existencias"
     });
-    }else{
+    }else if(InventarioFechaCaducidad){
       return res.status(400).json({
         status: 'failed',
-        result: "No se escribio la Descripcion de la Presentacion"
+        result: "No se ingreso la Fecha de Caducidad"
     });
-    }
+    } else{
+      return res.status(400).json({
+        status: 'failed',
+        result: "No se ingreso el producto del inventario"
+    });
+  }
   }
 });
 
@@ -133,7 +143,7 @@ router.delete('/delete/:id', async (req, res)=>{
   const {id} = req.params;
   if(id){
     try{
-      const result = await presentacionModel.deleteOne(id);
+      const result = await inventarioModel.deleteOne(id);
       res.status(200).json({
         status:'ok', 
         result: result
@@ -146,7 +156,7 @@ router.delete('/delete/:id', async (req, res)=>{
   } else{
     return res.status(400).json({
       status: 'failed',
-      result: "No se Ingreso el id de la presentacion"
+      result: "No se Ingreso el id del inventario"
   });
   }
   });
