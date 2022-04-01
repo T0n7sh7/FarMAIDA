@@ -1,5 +1,4 @@
 const express = require('express');
-const res = require('express/lib/response');
 const router = express.Router();
 
 const Productos = new require('../../../../dao/productos/productos.model');
@@ -8,28 +7,22 @@ const productosModel = new Productos();
 //POST NEW
 router.post('/new', async (req,res)=>{
     const {
-        id, 
         productoNombre, 
         productoDescripcion,
         productoPrecio,
         productoActivo,
         productoImagen,
-        createdAt,
-        updatedAt,
         laboratorioId,
         presentacionId
     } = req.body;
 
     try{
         rslt = await productosModel.new(
-            id, 
             productoNombre, 
             productoDescripcion,
             productoPrecio,
             productoActivo,
             productoImagen,
-            createdAt,
-            updatedAt,
             laboratorioId,
             presentacionId
         );
@@ -74,7 +67,7 @@ router.get('/facet/:page/:items', async (req, res)=>{
     const items = parseInt(req.params.items, 10); 
     if(allowedItems.includes(items)){
         try{
-            const pacientes = await pacienteModel.getFaceted(page, items);
+            const pacientes = await productosModel.getFaceted(page, items);
             res.status(200).json({status:'ok', docs:pacientes});
         }catch(ex){
             console.log(ex);
@@ -90,7 +83,22 @@ router.get('/facet/:page/:items', async (req, res)=>{
 router.put('/update/:id', async(req, res)=>{
     try{
         const {id} = req.params;
-        const rslt = await productosModel.updateOne(id);
+        const {
+            productoNombre, 
+            productoDescripcion,
+            productoPrecio,
+            productoActivo,
+            productoImagen,
+            laboratorioId,
+            presentacionId
+        } = req.body;
+        const rslt = await productosModel.updateOne(id,productoNombre, 
+            productoDescripcion,
+            productoPrecio,
+            productoActivo,
+            productoImagen,
+            laboratorioId,
+            presentacionId);
         res.status(200).json({status:'ok', result: rslt});
     }catch(ex){
         console.log(ex);
@@ -103,7 +111,7 @@ router.put('/addtag/:id', async(req, res)=>{
     try{
         const {tag} = req.body;
         const {id} = req.params;
-        const result = await pacienteModel.updateAddTag(id, tag);
+        const result = await productosModel.updateAddTag(id, tag);
         res.status(200).json({status:'ok', result});
     }
     catch(ex){
@@ -118,7 +126,7 @@ router.put('/addtagset/:id', async(req, res)=>{
     try{
         const {tag} = req.body;
         const {id} = req.params;
-        const result = await pacienteModel.updateAddTagSet(id, tag);
+        const result = await productosModel.updateAddTagSet(id, tag);
         res.status(200).json({status:'ok', result});
     }
     catch(ex){

@@ -14,24 +14,23 @@ class Productos{
             if(process.env.MIGRATE === 'true'){
                 //Por si se ocupa
             }
-        });
+        })
+        .catch((err) => { console.error(err)});
     }//constructor
 
     //new    
     async new(
-        id, 
         productoNombre, 
         productoDescripcion,
         productoPrecio,
         productoActivo,
         productoImagen,
-        createdAt,
-        updatedAt,
         laboratorioId,
         presentacionId 
     ){
+        const createdAt = new Date();
+        const updatedAt = new Date();
         const newProducto = {
-            id, 
             productoNombre, 
             productoDescripcion,
             productoPrecio,
@@ -73,17 +72,22 @@ class Productos{
     }
 
     //updateOne
-    async updateOne(id){
+    async updateOne(id,productoNombre, 
+        productoDescripcion,
+        productoPrecio,
+        productoActivo,
+        productoImagen,
+        laboratorioId,
+        presentacionId){
         const filter = {_id : new ObjectId(id)};
+        const updatedAt = new Date();
         const updateCmd = {
             '$set':{
-                id, 
                 productoNombre, 
                 productoDescripcion,
                 productoPrecio,
                 productoActivo,
                 productoImagen,
-                createdAt,
                 updatedAt,
                 laboratorioId,
                 presentacionId

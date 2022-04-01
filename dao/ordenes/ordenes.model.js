@@ -19,26 +19,18 @@ class Ordenes{
 
     //new
     async new(
-        id,
-        ordenEstado,
-        ordenSubtotal,
-        ordenDescuento,
-        ordenImpuesto,
-        ordenTotal,
-        createdAt,
-        updatedAt,
-        usuarioId
+        FarmaceuticaEntrega,
+        ProductoEntrega,
+        CantidadEntrega,
+        OrdenTotal
     ){
+        const FechaEnvio = new Date();
         const newOrden = {
-            id,
-            ordenEstado,
-            ordenSubtotal,
-            ordenDescuento,
-            ordenImpuesto,
-            ordenTotal,
-            createdAt,
-            updatedAt,
-            usuarioId
+            FarmaceuticaEntrega,
+            ProductoEntrega,
+            CantidadEntrega,
+            OrdenTotal,
+            FechaEnvio
         };
         const rslt = await this.collection.insertOne(newOrden);
         return rslt;
@@ -71,19 +63,15 @@ class Ordenes{
     }
 
     //updateOne
-    async updateOne(){
+    async updateOne(id, FarmaceuticaEntrega, ProductoEntrega, CantidadEntrega, OrdenTotal){
         const filter = {_id : new ObjectId(id)};
         const updateCmd = {
             '$set':{
-                id,
-                ordenEstado,
-                ordenSubtotal,
-                ordenDescuento,
-                ordenImpuesto,
-                ordenTotal,
-                createdAt,
-                updatedAt,
-                usuarioId
+                FarmaceuticaEntrega,
+                ProductoEntrega,
+                CantidadEntrega,
+                OrdenTotal,
+                FechaEnvio
             }
         };
         const rslt = await this.collection.updateOne(filter, updateCmd);

@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Usuarios = require('../../../../dao/usuario/usuarios.model');
 const usuariosModel = new Usuarios();
+const nodemailer = require("../../../../config/correo");
 
 router.post('/signin', async (req, res)=>{
     try{
@@ -43,4 +44,21 @@ router.post('/login', async(req, res)=>{
     }
 });
 
+router.post('/recuperarcontraseña', async(req, res)=>{
+    const {email} = req.body;
+    if(!email){
+        res.status(400).json({status:'failed', msg:"No se a ingresado un correo"})
+    } else{
+        const buscarCliente = await usuariosModel.getByEmail(email);
+        const temppass='123456'
+        if(buscarCliente){
+            const rls = await usuariosModel.updatePassword(email,temppass);
+            const data = {correo: buscarCliente.usuarioCorreo, contraseña:temppass}
+            nodemailer.recuperarcontraseña(data);
+            return res.status(200).json({status:'sucess', msg:"Correo enviado"});
+        } else{
+            res.status(400).json({status:'failed', msg:"No se a encontrado el correo"})
+        }
+    }
+})
 module.exports = router;

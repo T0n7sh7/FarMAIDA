@@ -130,6 +130,17 @@ class Usuarios {
       return await this.collection.updateOne(filter, updateCmd);
     }
 
+    async updatePassword(usuarioCorreo, usuarioContrasena){
+      const filter = {usuarioCorreo};
+      const updateCmd = {
+        '$set':{
+          usuarioContrasena: await this.hashPassword(usuarioContrasena),
+        }
+      };
+      return await this.collection.updateOne(filter, updateCmd);
+  
+    }
+
     //Delete
     async deleteOne(id){
       const filter = {_id: new ObjectId(id)};

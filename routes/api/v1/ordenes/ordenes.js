@@ -7,27 +7,17 @@ const ordenesModel = new Ordenes();
 
 //POST NEW
 router.post('/new', async (req, res)=>{
-    const {id,
-        ordenEstado,
-        ordenSubtotal,
-        ordenDescuento,
-        ordenImpuesto,
-        ordenTotal,
-        createdAt,
-        updatedAt,
-        usuarioId
+    const {FarmaceuticaEntrega,
+        ProductoEntrega,
+        CantidadEntrega,
+        OrdenTotal
     } = req.body;
     try{
         const rslt = await ordenesModel.new(
-            id,
-            ordenEstado,
-            ordenSubtotal,
-            ordenDescuento,
-            ordenImpuesto,
-            ordenTotal,
-            createdAt,
-            updatedAt,
-            usuarioId
+            FarmaceuticaEntrega,
+            ProductoEntrega,
+            CantidadEntrega,
+            OrdenTotal
         );
         res.status(200).json({status:'ok', result: rslt});
     } catch(ex){
@@ -70,8 +60,8 @@ router.get('/facet/:page/:items', async (req, res)=>{
     const items = parseInt(req.params.items, 10); 
     if(allowedItems.includes(items)){
         try{
-            const pacientes = await pacienteModel.getFaceted(page, items);
-            res.status(200).json({status:'ok', docs:pacientes});
+            const ordenes = await ordenesModel.getFaceted(page, items);
+            res.status(200).json({status:'ok', docs:ordenes});
         }catch(ex){
             console.log(ex);
             res.status(500).json({status:'failed'});
@@ -87,7 +77,8 @@ router.get('/facet/:page/:items', async (req, res)=>{
 router.put('/update/:id', async(req, res)=>{
     try{
         const {id} = req.params;
-        const rslt = await ordenesModel.updateOne(id);
+        const {FarmaceuticaEntrega, ProductoEntrega, CantidadEntrega, OrdenTotal} = req.body;
+        const rslt = await ordenesModel.updateOne(id, FarmaceuticaEntrega, ProductoEntrega, CantidadEntrega, OrdenTotal);
         res.status(200).json({status:'ok', result: rslt});
     }catch(ex){
         console.log(ex);
@@ -100,7 +91,7 @@ router.put('/addtag/:id', async(req, res)=>{
     try{
         const {tag} = req.body;
         const {id} = req.params;
-        const result = await pacienteModel.updateAddTag(id, tag);
+        const result = await ordenesModel.updateAddTag(id, tag);
         res.status(200).json({status:'ok', result});
     }
     catch(ex){
@@ -115,7 +106,7 @@ router.put('/addtagset/:id', async(req, res)=>{
     try{
         const {tag} = req.body;
         const {id} = req.params;
-        const result = await pacienteModel.updateAddTagSet(id, tag);
+        const result = await ordenesModel.updateAddTagSet(id, tag);
         res.status(200).json({status:'ok', result});
     }
     catch(ex){
@@ -129,7 +120,7 @@ router.put('/addtagset/:id', async(req, res)=>{
 router.delete('/delete/:id', async(req, res)=>{
     try{
         const {id} = req.params;
-        const rslt = await carritosModel.deleteOne(id);
+        const rslt = await ordenesModel.deleteOne(id);
         res.status(200).json({status:'ok', result: rslt});
     }catch(ex){
         console.log(ex);
