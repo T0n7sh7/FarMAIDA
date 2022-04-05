@@ -108,6 +108,9 @@ class Ordenes{
         const rslt = await this.collection.deleteOne(filter);
         return rslt;
     }
+    async deleteOneName(FarmaceuticaEntrega){
+        return await this.collection.findOneAndDelete({FarmaceuticaEntrega:FarmaceuticaEntrega });
+      }
 
 }//class
 

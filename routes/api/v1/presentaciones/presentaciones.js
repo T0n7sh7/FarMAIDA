@@ -8,7 +8,7 @@ const presentacionModel = new Presentaciones();
 router.get('/all', async (req, res)=>{
   try{
       const rows = await presentacionModel.getAll();
-      res.status(200).json({status:'ok', ordenes: rows});
+      res.status(200).json({status:'ok', presentaciones: rows});
 
   }catch(ex){
       console.log(ex);
@@ -161,6 +161,28 @@ router.delete('/delete/:id', async (req, res)=>{
   });
   }
   });
+
+  router.delete('/deleteName', async (req, res)=>{
+    const {PresentacionNombre} = req.body;
+    if(PresentacionNombre){
+      try{
+        const result = await presentacionModel.deleteOneName(PresentacionNombre);
+        res.status(200).json({
+          status:'ok', 
+          result: result
+      });
+      
+      }catch (ex){
+        console.log(ex);
+        res.status(500).json({status: 'failed'})
+      }
+    } else{
+      return res.status(400).json({
+        status: 'failed',
+        result: "No se Ingreso el id de la presentacion"
+    });
+    }
+    });
 
 
 

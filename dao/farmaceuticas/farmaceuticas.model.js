@@ -107,6 +107,10 @@ class Farmaceuticas {
       const filter = {_id: new ObjectId(id)};
       return await this.collection.deleteOne(filter);
     }
+
+    async deleteOneName(FarmaceuticaNombre){
+      return await this.collection.findOneAndDelete({FarmaceuticaNombre:FarmaceuticaNombre });
+    }
 }
 
 module.exports = Farmaceuticas;

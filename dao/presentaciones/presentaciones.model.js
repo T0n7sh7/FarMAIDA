@@ -101,6 +101,9 @@ class Presentaciones {
       const filter = {_id: new ObjectId(id)};
       return await this.collection.deleteOne(filter);
     }
+    async deleteOneName(PresentacionNombre){
+      return await this.collection.findOneAndDelete({PresentacionNombre:PresentacionNombre });
+    }
 }
 
 module.exports = Presentaciones;

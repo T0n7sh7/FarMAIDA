@@ -103,6 +103,9 @@ class Inventarios {
       const filter = {_id: new ObjectId(id)};
       return await this.collection.deleteOne(filter);
     }
+    async deleteOneName(Producto){
+      return await this.collection.findOneAndDelete({Producto:Producto });
+    }
 }
 
 module.exports = Inventarios;

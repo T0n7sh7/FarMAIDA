@@ -148,4 +148,26 @@ router.delete('/delete/:id', async(req, res)=>{
     }
 });
 
+router.delete('/deleteName', async (req, res)=>{
+    const {productoNombre} = req.body;
+    if(productoNombre){
+      try{
+        const result = await productosModel.deleteOneName(productoNombre);
+        res.status(200).json({
+          status:'ok', 
+          result: result
+      });
+      
+      }catch (ex){
+        console.log(ex);
+        res.status(500).json({status: 'failed'})
+      }
+    } else{
+      return res.status(400).json({
+        status: 'failed',
+        result: "No se Ingreso el id de la presentacion"
+    });
+    }
+    });
+
 module.exports = router;

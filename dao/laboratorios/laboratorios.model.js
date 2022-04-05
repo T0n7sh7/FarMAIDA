@@ -101,6 +101,9 @@ class Laboratorios {
       const filter = {_id: new ObjectId(id)};
       return await this.collection.deleteOne(filter);
     }
+    async deleteOneName(LaboratorioNombre){
+      return await this.collection.findOneAndDelete({LaboratorioNombre:LaboratorioNombre });
+    }
 }
 
 module.exports = Laboratorios;

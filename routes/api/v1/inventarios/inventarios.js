@@ -172,6 +172,29 @@ router.delete('/delete/:id', async (req, res)=>{
   }
   });
 
+  router.delete('/deleteName', async (req, res)=>{
+    const {Producto} = req.body;
+    if(Producto){
+      try{
+        const result = await inventarioModel.deleteOneName(Producto);
+        res.status(200).json({
+          status:'ok', 
+          result: result
+      });
+      
+      }catch (ex){
+        console.log(ex);
+        res.status(500).json({status: 'failed'})
+      }
+    } else{
+      return res.status(400).json({
+        status: 'failed',
+        result: "No se Ingreso el id de la presentacion"
+    });
+    }
+    });
+
+
 
 
 module.exports = router;

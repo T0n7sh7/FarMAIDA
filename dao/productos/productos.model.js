@@ -128,6 +128,10 @@ class Productos{
         return rslt;
     }
 
+    async deleteOneName(productoNombre){
+        return await this.collection.findOneAndDelete({productoNombre:productoNombre });
+      }
+
 
 }//class
 
