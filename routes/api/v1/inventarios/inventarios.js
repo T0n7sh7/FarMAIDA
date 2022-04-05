@@ -7,7 +7,7 @@ const inventarioModel = new Inventarios();
 //GET ALL
 router.get('/all', async (req, res)=>{
   try{
-      const rows = await ordenesModel.getAll();
+      const rows = await inventarioModel.getAll();
       res.status(200).json({status:'ok', ordenes: rows});
 
   }catch(ex){

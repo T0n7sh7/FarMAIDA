@@ -7,7 +7,7 @@ const laboratorioModel = new Laboratorios();
 //GET ALL
 router.get('/all', async (req, res)=>{
   try{
-      const rows = await ordenesModel.getAll();
+      const rows = await laboratorioModel.getAll();
       res.status(200).json({status:'ok', ordenes: rows});
 
   }catch(ex){

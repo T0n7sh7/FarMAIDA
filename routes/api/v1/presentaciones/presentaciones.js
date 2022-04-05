@@ -7,7 +7,7 @@ const presentacionModel = new Presentaciones();
 //GET ALL
 router.get('/all', async (req, res)=>{
   try{
-      const rows = await ordenesModel.getAll();
+      const rows = await presentacionModel.getAll();
       res.status(200).json({status:'ok', ordenes: rows});
 
   }catch(ex){
