@@ -10,12 +10,11 @@ router.post('/new', async (req,res)=>{
         productoNombre, 
         productoDescripcion,
         productoPrecio,
-        productoActivo,
         productoImagen,
         laboratorioId,
         presentacionId
     } = req.body;
-
+    const productoActivo="True"
     try{
         rslt = await productosModel.new(
             productoNombre, 
