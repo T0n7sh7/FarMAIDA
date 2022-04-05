@@ -8,7 +8,7 @@ const inventarioModel = new Inventarios();
 router.get('/all', async (req, res)=>{
   try{
       const rows = await inventarioModel.getAll();
-      res.status(200).json({status:'ok', ordenes: rows});
+      res.status(200).json({status:'ok', farmaceuticas: rows});
 
   }catch(ex){
       console.log(ex);
