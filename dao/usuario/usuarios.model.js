@@ -11,7 +11,7 @@ class Usuarios {
       this.collection = db.collection('Usuarios');
       if (process.env.MIGRATE === 'true') {
           // Por si se ocupa algo
-          this.collection.createIndex({"usuarioContrasena":1},{unique: true}).then((rlst)=>{
+          this.collection.createIndex({"usuarioCorreo":1},{unique: true}).then((rlst)=>{
             console.log("Indice creado satisfactoriamente", rlst);
         }).catch((err)=>{
             console.error("Error al crear indice", err);
