@@ -4,7 +4,18 @@ const router = express.Router();
 const Farmaceuticas = new require('../../../../dao/farmaceuticas/farmaceuticas.model');
 const farmaceuticaModel = new Farmaceuticas();
 
+//GET ALL
+router.get('/all', async (req, res)=>{
+  try{
+      const rows = await ordenesModel.getAll();
+      res.status(200).json({status:'ok', ordenes: rows});
 
+  }catch(ex){
+      console.log(ex);
+      res.status(500).json({status:'failed'});
+  }
+
+});
 //Paginacion
 const allowedItemsNumber = [10,15,20];
 router.get('/facet/:page/:items', async (req,res)=>{
