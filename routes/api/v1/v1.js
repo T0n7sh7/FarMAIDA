@@ -16,10 +16,10 @@ router.use(passport.initialize());
 //Public
 router.use('/seguridad', seguridadRouter);
 //middlewares
-router.use('/inventarios',verifyApiHeaderToken,jwtMiddleware, inventariosRoutes);
-router.use('/laboratorios',verifyApiHeaderToken,jwtMiddleware, laboratoriosRoutes);
-router.use('/ordenes',verifyApiHeaderToken,jwtMiddleware, ordenesRoutes);
-router.use('/productos',verifyApiHeaderToken,jwtMiddleware, productosRoutes);
-router.use('/presentaciones',verifyApiHeaderToken,jwtMiddleware,presentacionesRoutes);
-router.use('/farmaceuticas',verifyApiHeaderToken,jwtMiddleware,farmaceuticasRoutes);
+router.use('/inventarios',verifyApiHeaderToken, inventariosRoutes);
+router.use('/laboratorios',verifyApiHeaderToken, laboratoriosRoutes);
+router.use('/ordenes',verifyApiHeaderToken, ordenesRoutes);
+router.use('/productos',verifyApiHeaderToken, productosRoutes);
+router.use('/presentaciones',verifyApiHeaderToken,presentacionesRoutes);
+router.use('/farmaceuticas',verifyApiHeaderToken,farmaceuticasRoutes);
 module.exports = router;
